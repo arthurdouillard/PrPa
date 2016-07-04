@@ -1,0 +1,14 @@
+# PrPa
+Pipeline de filtre video pour PrPa
+
+(http://wiki-prog.infoprepa.epita.fr/index.php/ING1:PrPa:2016:projet)[Lien vers le sujet]
+
+Rappel: Objectifs minimaux:
+
+ chargement et traitement du vidéo avec un ensemble d'au moins 3 filtres consécutifs
+ Vous devrez au moins implémenter:
+    * un overlay
+    * un filtre de convolution
+    * un autre filtre au choix
+    * un mode séquentiel (non parallèle) et un mode parallèle
+    * des mesures de performances comparées
