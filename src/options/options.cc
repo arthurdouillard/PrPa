@@ -8,7 +8,7 @@ struct Options options_parser(int argc, char** argv)
   desc.add_options()
     ("help.h", "Display the help")
     ("video,v", bpo::value<std::string>(), "Video file (*.avi)")
-    ("filter,f", bpo::value<std::string>(), "Filter to use")
+    ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("list-filter,l", "List of available filter (or other FX)");
 
   bpo::variables_map vm;
@@ -42,7 +42,7 @@ struct Options options_parser(int argc, char** argv)
 
   Options opt = {
                   vm["video"].as<std::string>(),
-                  vm["filter"].as<std::string>()
+                  vm["filter"].as<std::vector<std::string>>()
                 };
 
   return opt;

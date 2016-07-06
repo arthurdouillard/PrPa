@@ -13,4 +13,4 @@ all:
 	$(CC) $(OPENCV) -l$(BPO) -o $(OUT) $(SRC)
 
 clean:
-	rm $(OUT)
+	rm -f $(OUT)
