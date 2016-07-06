@@ -12,3 +12,8 @@ Rappel: Objectifs minimaux:
     * un autre filtre au choix
     * un mode séquentiel (non parallèle) et un mode parallèle
     * des mesures de performances comparées
+
+
+Dependences:
+* boost
+* opencv
