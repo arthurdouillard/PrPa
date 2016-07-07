@@ -11,7 +11,7 @@ namespace filters
   class ModelFilter : public tbb::filter
   {
     public:
-      ModelFilter(tbb::mode mode, std::string name);
+      ModelFilter(tbb::filter::mode mode, std::string name);
       // overload of tbb::filter
       virtual void* operator()(void* image) = 0;
 

@@ -1,5 +1,6 @@
 CC=g++
-SRC=src/main.cc src/options/options.cc src/grayscale.cc src/writer.cc
+SRC=src/main.cc src/options/options.cc src/filter/grayscale.cc \
+    src/filter/writer.cc src/filter/modelfilter.cc
 
 OUT=prpa
 

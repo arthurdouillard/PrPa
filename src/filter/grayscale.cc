@@ -3,7 +3,7 @@
 
 namespace filters
 {
-  GrayscaleFilter::GrayscaleFilter(tbb::mode mode,
+  GrayscaleFilter::GrayscaleFilter(tbb::filter::mode mode,
                                    frame_iterator first, frame_iterator last)
     : ModelFilter(mode, "grayscale")
     , first_(first)

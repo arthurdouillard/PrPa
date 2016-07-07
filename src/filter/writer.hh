@@ -3,6 +3,7 @@
 #include <tbb/tbb.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "modelfilter.hh"
 
 namespace filters
 {
@@ -11,7 +12,7 @@ namespace filters
   class Writer : public ModelFilter
   {
     public:
-      Writer(tbb::mode mode);
+      Writer(tbb::filter::mode mode);
       // overload of tbb::filter
       void* operator()(void* image);
 

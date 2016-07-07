@@ -3,6 +3,7 @@
 #include <tbb/tbb.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include "modelfilter.hh"
 
 namespace filters
 {
@@ -11,7 +12,8 @@ namespace filters
   class GrayscaleFilter : public ModelFilter
   {
     public:
-      GrayscaleFilter(tbb::mode, frame_iterator first, frame_iterator last);
+      GrayscaleFilter(tbb::filter::mode, frame_iterator first,
+                      frame_iterator last);
       // overload of tbb::filter
       void* operator()(void* image);
 

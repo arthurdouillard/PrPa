@@ -2,7 +2,7 @@
 
 namespace filters
 {
-  ModelFilter::ModelFilter(tbb::mode mode, std::string name)
+  ModelFilter::ModelFilter(tbb::filter::mode mode, std::string name)
     : tbb::filter(mode)
     , name_(name)
   {}

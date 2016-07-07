@@ -5,8 +5,8 @@
 
 #include "main.hh"
 #include "options/options.hh"
-#include "grayscale.hh"
-#include "writer.hh"
+#include "filter/grayscale.hh"
+#include "filter/writer.hh"
 
 namespace bpo = boost::program_options;
 

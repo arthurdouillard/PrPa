@@ -8,7 +8,7 @@
 namespace filters
 {
 
-  Writer::Writer(tbb::mode mode)
+  Writer::Writer(tbb::filter::mode mode)
     : ModelFilter(mode, "writer")
   {}
 
