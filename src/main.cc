@@ -3,6 +3,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 
+#include "main.hh"
 #include "options/options.hh"
 #include "grayscale.hh"
 
@@ -29,11 +30,11 @@ int main(int argc, char** argv)
   cv::namedWindow("w", 1);
   for (auto f : frames)
   {
-    imshow("w", f);
-    waitKey(50);
+    cv::imshow("w", f);
+    cv::waitKey(50);
   }
 
-  waitKey(0);
+  cv::waitKey(0);
 }
 
 
@@ -51,7 +52,7 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
   pipe.clear();
 }
 
-std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
+std::vector<cv::Mat>& copy_video(cv::VideoCapture& cap)
 {
   // New video frames.
   std::vector<cv::Mat> frames;
