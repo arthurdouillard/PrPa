@@ -21,7 +21,7 @@ namespace filters
       { 0, -1, 0 },
       { -1, 5, -1 },
       { -1, 0, -1 }
-    }
+    };
 
     cv::Mat copy = img_.clone();
 
@@ -38,7 +38,9 @@ namespace filters
           for (int pos = 0; pos < kernel[row].size(); pos++)
           {
             int elt = kernel[row][pos];
-            auto in = img_.at<cv::Vec3b>(i - row, j - pos);
+            int x = i - row < 0 ? 0 : i - row;
+            int y = j - pos < 0 ? 0 : j - pos;
+            auto in = img_.at<cv::Vec3b>(x, y);
 
             acc_r += elt * in[2];
             acc_g += elt * in[1];
@@ -54,7 +56,9 @@ namespace filters
     }
     ++first_;
 
-    return &copy;
+    img_ = copy;
+
+    return &img_;
   }
 
 }

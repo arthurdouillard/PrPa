@@ -9,6 +9,7 @@
 #include "filter/writer.hh"
 #include "filter/modelfilter.hh"
 #include "filter/sepia.hh"
+#include "filter/sharpen.hh"
 
 namespace bpo = boost::program_options;
 
@@ -70,6 +71,8 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   filters.push_back(gray);
   auto sepia = std::make_shared<filters::Sepia>(mode, frames.begin(), frames.end());
   filters.push_back(sepia);
+  auto sharpen = std::make_shared<filters::Sharpen>(mode, frames.begin(), frames.end());
+  filters.push_back(sharpen);
 
   for (auto it = filters.begin(); it != filters.end();)
   {
