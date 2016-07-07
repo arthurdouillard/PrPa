@@ -1,6 +1,7 @@
 #include <tbb/tbb.h>
 #include <opencv2/imgproc/imgproc.hpp>
 #include <opencv2/highgui/highgui.hpp>
+#include <iostream>
 #include "grayscale.hh"
 
 
@@ -15,27 +16,32 @@ namespace filters
   void* GrayscaleFilter::operator()(void* image)
   {
     // end the pipeline after the last image
-    if (first == last)
+    if (first_ == last_)
       return nullptr;
 
-    cv::Mat& frame = (cv::Mat) image;
-    int cn = frame.channels();
-    Scalar_<uint8_t> bgrPixel;
-
-    for (int i = 0; i < frame.rows; i++)
+    cv::Mat* frame = (cv::Mat*) image;
+    if (!frame)
     {
-      uint8_t* rowPtr = frames_.row(i);
-      for (int j = 0; j < frames_.cols; j++)
-      {
-        unsigned int blue = rowPtr[j*cn + 0]; // B
-        unsigned int green = rowPtr[j*cn + 1]; // G
-        unsigned int red = rowPtr[j*cn + 2]; // R
-
-        Vec3b &current_img = frames_.at<Vec3b>(j, i);
-        current_img = (blue + red + green) / 3;
+      std::cout << "ERROR" << std::endl;
+      return nullptr;
     }
-    ++first;
-    return &frame;
+
+    for (int i = 0; i < frame->rows; i++)
+    {
+      for (int j = 0; j < frame->cols; j++)
+      {
+        cv::Vec3b &current_img = frame->at<cv::Vec3b>(j, i);
+        unsigned int blue = current_img[0]; // B
+        unsigned int green = current_img[1]; // G
+        unsigned int red = current_img[2]; // R
+
+        current_img[0] = (blue + red + green) / 3;
+        current_img[1] = (blue + red + green) / 3;
+        current_img[2] = (blue + red + green) / 3;
+      }
+    }
+    ++first_;
+    return frame;
   }
 
 }
