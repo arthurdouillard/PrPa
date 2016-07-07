@@ -25,6 +25,7 @@ int main(int argc, char** argv)
 
   cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
   // Get copy.
+  cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
   auto frames = copy_video(cap);
 
   launch_pipeline(frames, opt);

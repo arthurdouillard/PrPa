@@ -15,7 +15,7 @@ namespace filters
   void* Writer::operator()(void* image)
   {
     cv::Mat* input = (cv::Mat*) image;
-    cv::imshow("w", *input);
+    cv::imshow("vidz", *input);
     if (cv::waitKey(30) > 0)
       return 0;
 
