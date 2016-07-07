@@ -27,12 +27,14 @@ int main(int argc, char** argv)
 
   launch_pipeline(frames, opt);
 
+/*
   cv::namedWindow("w", 1);
   for (auto& f : frames)
   {
     cv::imshow("w", f);
     cv::waitKey(20);
   }
+*/
 }
 
 
@@ -43,13 +45,13 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
 
   tbb::pipeline pipe;
 
-  std::cout << "Launching filter" << std::endl;
   filters::GrayscaleFilter filter(frames.begin(), frames.end());
+  filters::Writer writer;
 
   pipe.add_filter(filter);
-  pipe.run(1);
+  pipe.add_filter(writer);
+  pipe.run(2);
   pipe.clear();
-  std::cout << "Finish" << std::endl;
 }
 
 std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)

@@ -25,7 +25,7 @@ namespace filters
     {
       for (int j = 0; j < frame.cols; j++)
       {
-        cv::Vec3b &current_img = frame.at<cv::Vec3b>(j, i);
+        cv::Vec3b &current_img = frame.at<cv::Vec3b>(i, j);
         unsigned int blue = current_img[0]; // B
         unsigned int green = current_img[1]; // G
         unsigned int red = current_img[2]; // R
