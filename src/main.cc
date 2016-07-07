@@ -13,8 +13,6 @@ int main(int argc, char** argv)
 
   // Get input video.
   cv::VideoCapture cap(opt.video);
-  // New video frames.
-  std::vector<cv::Mat> frames;
 
   if (!cap.isOpened())
   {
@@ -22,12 +20,33 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  // Copy original video to the new one.
+  // Get copy.
+  auto frames = copy_video(cap);
+
+  launch_pipeline(frames, opt);
+}
+
+
+void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
+{
+  // Get filters according to their names.
+  //std::vector<tbb::filter> filters = get_filters(opt.filter);
+
+  tbb::pipeline pipe;
+}
+
+std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
+{
+  // New video frames.
+  std::vector<cv::Mat> frames;
+
+  // Copy origin/al video to the new one.
   cv::Mat frame;
   while (true)
   {
     cap >> frame;
     frames.push_back(frame);
   }
-}
 
+  return frames;
+}
