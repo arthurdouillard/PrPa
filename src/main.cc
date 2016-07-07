@@ -56,7 +56,7 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
   std::cout << "Finish" << std::endl;
 }
 
-std::vector<cv::Mat>& copy_video(cv::VideoCapture& cap)
+std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
 {
   // New video frames.
   std::vector<cv::Mat> frames;
