@@ -46,7 +46,8 @@ launch_pipeline(std::vector<std::shared_ptr<filters::ModelFilter>> filters)
   for (auto& f : filters)
     pipe.add_filter(*f);
 
-  pipe.run(1);
+  int par = filters.size() == 1 ? filters.size() - 1 : 1;
+  pipe.run(par);
   pipe.clear();
 }
 
@@ -70,7 +71,7 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   auto sepia = std::make_shared<filters::Sepia>(mode, frames.begin(), frames.end());
   filters.push_back(sepia);
 
-  for (auto it = filters.begin(); it != filters.end(); it++)
+  for (auto it = filters.begin(); it != filters.end();)
   {
     bool flag = false;
     for (auto& name : opt.filter)
@@ -84,6 +85,8 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
 
     if (!flag)
       filters.erase(it++);
+    else
+      it++;
   }
 
   auto writer = std::make_shared<filters::Writer>(mode);
