@@ -38,7 +38,7 @@ struct Options options_parser(int argc, char** argv)
     exit(1);
   }
 
-  auto mode = vm["mode"].as<std::vector<std::string>>();
+  auto mode = vm["mode"].as<std::string>();
   if (mode != "so" && mode != "si" && mode != "pa")
   {
     std::cerr << "Mode should be either: so | si | pa" << std::endl;

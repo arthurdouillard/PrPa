@@ -31,47 +31,48 @@ int main(int argc, char** argv)
   cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
 
   // Fill vector of every filters
-  std::vector<filters::ModelFilter> = load_filter(frames, opt);
+  auto filters = load_filter(frames, opt);
 
   launch_pipeline(filters);
 }
 
 
-void launch_pipeline(std::vector<filters::ModelFilter>& filters)
+void
+launch_pipeline(std::vector<std::shared_ptr<filters::ModelFilter>> filters)
 {
   tbb::pipeline pipe;
 
   for (auto& f : filters)
-    pipe.add_filter(f);
+    pipe.add_filter(*f);
 
   pipe.run(1);
   pipe.clear();
 }
 
 
-std::vector<filters::ModelFilter> load_filter(std::vector<cv::Mat>& frames,
-                                              Options& opt)
+std::vector<std::shared_ptr<filters::ModelFilter>>
+load_filter(std::vector<cv::Mat>& frames, Options& opt)
 {
   tbb::filter::mode mode;
-  if (mode == "so")
+  if (opt.mode == "so")
     mode = tbb::filter::serial_out_of_order;
-  else if (mode == "si")
+  else if (opt.mode == "si")
     mode = tbb::filter::serial_in_order;
   else
     mode = tbb::filter::parallel;
 
-  std::vector<filters::ModelFilter> filters;
+  std::vector<std::shared_ptr<filters::ModelFilter>> filters;
 
   // Load all filters
-  filters::GrayscaleFilter filter(mode, frames.begin(), frames.end());
-  filters.push_back(filter);
+  auto gray = std::make_shared<filters::GrayscaleFilter>(mode, frames.begin(), frames.end());
+  filters.push_back(gray);
 
   for (auto it = filters.begin(); it != filters.end(); it++)
   {
     bool flag = false;
     for (auto& name : opt.filter)
     {
-      if (it->name_get() == name)
+      if ((*it)->name_get() == name)
       {
         flag = true;
         break;
@@ -82,7 +83,7 @@ std::vector<filters::ModelFilter> load_filter(std::vector<cv::Mat>& frames,
       filters.erase(it++);
   }
 
-  filters::Writer writer;
+  auto writer = std::make_shared<filters::Writer>(mode);
   filters.push_back(writer);
 
   return filters;
