@@ -25,10 +25,10 @@ int main(int argc, char** argv)
 
   // Get copy.
   auto frames = copy_video(cap);
+  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
 
    launch_pipeline(frames, opt);
 
-  cv::namedWindow("w", 1);
 /*
   for (auto& f : frames)
   {
@@ -43,7 +43,6 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
 {
   // Get filters according to their names.
   //std::vector<tbb::filter> filters = get_filters(opt.filter);
-
   tbb::pipeline pipe;
 
   filters::GrayscaleFilter filter(frames.begin(), frames.end());
@@ -51,7 +50,7 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
 
   pipe.add_filter(filter);
   pipe.add_filter(writer);
-  pipe.run(2);
+  pipe.run(1);
   pipe.clear();
 }
 
@@ -69,6 +68,5 @@ std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
       break;
     frames.push_back(frame.clone());
   }
-
   return frames;
 }
