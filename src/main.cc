@@ -23,37 +23,62 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
   // Get copy.
   cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
   auto frames = copy_video(cap);
 
-  launch_pipeline(frames, opt);
+  // Create windows
+  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
 
-/*
-  for (auto& f : frames)
-  {
-    cv::imshow("w", f);
-    cv::waitKey(20);
-  }
-*/
+  // Fill vector of every filters
+  std::vector<filters::ModelFilter> = load_filter(frames, opt);
+
+  launch_pipeline(filters);
 }
 
 
-void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
+void launch_pipeline(std::vector<filters::ModelFilter>& filters)
 {
-  // Get filters according to their names.
-  //std::vector<tbb::filter> filters = get_filters(opt.filter);
   tbb::pipeline pipe;
 
-  filters::GrayscaleFilter filter(frames.begin(), frames.end());
-  filters::Writer writer;
+  for (auto& f : filters)
+    pipe.add_filter(f);
 
-  pipe.add_filter(filter);
-  pipe.add_filter(writer);
   pipe.run(1);
   pipe.clear();
 }
+
+
+std::vector<filters::ModelFilter> load_filter(std::vector<cv::Mat>& frames,
+                                              Options& opt)
+{
+  std::vector<filters::ModelFilter> filters;
+
+  filters::GrayscaleFilter filter(frames.begin(), frames.end());
+  filters.push_back(filter);
+
+  for (auto it = filters.begin(); it != filters.end(); it++)
+  {
+    bool flag = false;
+    for (auto& name : opt.filter)
+    {
+      if (it->name_get() == name)
+      {
+        flag = true;
+        break;
+      }
+    }
+
+    if (!flag)
+      filters.erase(it++);
+  }
+
+  filters::Writer writer;
+  filters.push_back(writer);
+
+  return filters;
+}
+
 
 std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
 {
