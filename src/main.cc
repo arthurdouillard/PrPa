@@ -10,6 +10,7 @@
 #include "filter/modelfilter.hh"
 #include "filter/sepia.hh"
 #include "filter/sharpen.hh"
+#include "filter/gaussian.hh"
 
 namespace bpo = boost::program_options;
 
@@ -32,15 +33,12 @@ int main(int argc, char** argv)
   // Create windows
   cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
-  // Fill vector of every filters
-  auto filters = load_filter(frames, opt);
-
-  launch_pipeline(filters);
+  launch_pipeline(load_filter(frames, opt));
 }
 
 
 void
-launch_pipeline(std::vector<std::shared_ptr<filters::ModelFilter>> filters)
+launch_pipeline(std::vector<filters::ModelFilter*> filters)
 {
   tbb::pipeline pipe;
 
@@ -53,7 +51,7 @@ launch_pipeline(std::vector<std::shared_ptr<filters::ModelFilter>> filters)
 }
 
 
-std::vector<std::shared_ptr<filters::ModelFilter>>
+std::vector<filters::ModelFilter*>
 load_filter(std::vector<cv::Mat>& frames, Options& opt)
 {
   tbb::filter::mode mode;
@@ -64,38 +62,37 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   else
     mode = tbb::filter::parallel;
 
-  std::vector<std::shared_ptr<filters::ModelFilter>> filters;
+  std::vector<filters::ModelFilter*> filters;
 
   // Load all filters
-  auto gray = std::make_shared<filters::GrayscaleFilter>(mode, frames.begin(), frames.end());
-  filters.push_back(gray);
-  auto sepia = std::make_shared<filters::Sepia>(mode, frames.begin(), frames.end());
-  filters.push_back(sepia);
-  auto sharpen = std::make_shared<filters::Sharpen>(mode, frames.begin(), frames.end());
-  filters.push_back(sharpen);
+  filters.push_back(new filters::GrayscaleFilter(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::Sepia(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::Sharpen(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::Gaussian(mode, frames.begin(), frames.end()));
 
-  for (auto it = filters.begin(); it != filters.end();)
+  std::vector<filters::ModelFilter*> filtered_filters;
+  for (auto it = filters.begin(); it != filters.end(); it++)
   {
-    bool flag = false;
     for (auto& name : opt.filter)
     {
       if ((*it)->name_get() == name)
       {
-        flag = true;
+        filtered_filters.emplace_back(*it);
         break;
       }
     }
-
-    if (!flag)
-      filters.erase(it++);
-    else
-      it++;
   }
 
-  auto writer = std::make_shared<filters::Writer>(mode);
-  filters.push_back(writer);
+  if (filtered_filters.size() == 0)
+  {
+    std::cerr << "No valid filters were given." << std::endl;
+    exit(1);
+  }
 
-  return filters;
+
+  filtered_filters.push_back(new filters::Writer(mode));
+
+  return filtered_filters;
 }
 
 
