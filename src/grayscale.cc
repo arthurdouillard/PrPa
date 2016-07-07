@@ -13,22 +13,25 @@ namespace filters
     , last_(last)
   {}
 
-  void* GrayscaleFilter::operator()(void*)
+  void* GrayscaleFilter::operator()(void* ptr)
   {
+    cv::Mat frame;
     // end the pipeline after the last image
     if (first_ == last_)
       return nullptr;
-
-    cv::Mat frame = *first_;
+    if (ptr != nullptr)
+      frame = *(static_cast<cv::Mat*>(ptr));
+    else
+      frame = *first_;
 
     for (int i = 0; i < frame.rows; i++)
     {
       for (int j = 0; j < frame.cols; j++)
       {
         cv::Vec3b &current_img = frame.at<cv::Vec3b>(i, j);
-        unsigned int blue = current_img[0]; // B
-        unsigned int green = current_img[1]; // G
-        unsigned int red = current_img[2]; // R
+        unsigned char blue = current_img[0]; // B
+        unsigned char green = current_img[1]; // G
+        unsigned char red = current_img[2]; // R
 
         current_img[0] = (blue + red + green) / 3;
         current_img[1] = (blue + red + green) / 3;
