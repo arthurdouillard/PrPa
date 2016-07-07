@@ -23,20 +23,16 @@ int main(int argc, char** argv)
   }
 
   // Get copy.
-  std::cout << "Copying video... ";
   auto frames = copy_video(cap);
-  std::cout << "Done !" << std::endl;
 
   launch_pipeline(frames, opt);
 
   cv::namedWindow("w", 1);
-  for (auto f : frames)
+  for (auto& f : frames)
   {
     cv::imshow("w", f);
-    cv::waitKey(50);
+    cv::waitKey(20);
   }
-
-  cv::waitKey(0);
 }
 
 
@@ -68,7 +64,7 @@ std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
     cap >> frame;
     if (frame.empty())
       break;
-    frames.push_back(frame);
+    frames.push_back(frame.clone());
   }
 
   return frames;
