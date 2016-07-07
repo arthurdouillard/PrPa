@@ -6,7 +6,7 @@ struct Options options_parser(int argc, char** argv)
 {
   bpo::options_description desc("Options");
   desc.add_options()
-    ("help.h", "Display the help")
+    ("help,h", "Display the help")
     ("video,v", bpo::value<std::string>(), "Video file (*.avi)")
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("list-filter,l", "List of available filter (or other FX)");
@@ -29,10 +29,7 @@ struct Options options_parser(int argc, char** argv)
     exit(0);
   }
   else if (vm.count("list-filter"))
-  {
-    std::cout << "Filters: blabla" << std::endl;
-    exit(0);
-  }
+    list_filter();
 
   if (!vm.count("video") || !vm.count("filter"))
   {
@@ -46,4 +43,12 @@ struct Options options_parser(int argc, char** argv)
                 };
 
   return opt;
+}
+
+
+void list_filter()
+{
+  std::cout << "Filters:"     << std::endl
+            << "* grayscale"  << std::endl;
+  exit(0);
 }

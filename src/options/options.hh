@@ -11,3 +11,4 @@ typedef struct Options
 } options;
 
 struct Options options_parser(int argc, char** argv);
+void list_filter();
