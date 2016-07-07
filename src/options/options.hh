@@ -8,7 +8,7 @@ typedef struct Options
 {
   std::string              video;
   std::vector<std::string> filter;
-  bool                     mode;
+  std::string              mode;
 } options;
 
 struct Options options_parser(int argc, char** argv);

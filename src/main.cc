@@ -52,9 +52,18 @@ void launch_pipeline(std::vector<filters::ModelFilter>& filters)
 std::vector<filters::ModelFilter> load_filter(std::vector<cv::Mat>& frames,
                                               Options& opt)
 {
+  tbb::filter::mode mode;
+  if (mode == "so")
+    mode = tbb::filter::serial_out_of_order;
+  else if (mode == "si")
+    mode = tbb::filter::serial_in_order;
+  else
+    mode = tbb::filter::parallel;
+
   std::vector<filters::ModelFilter> filters;
 
-  filters::GrayscaleFilter filter(frames.begin(), frames.end());
+  // Load all filters
+  filters::GrayscaleFilter filter(mode, frames.begin(), frames.end());
   filters.push_back(filter);
 
   for (auto it = filters.begin(); it != filters.end(); it++)
