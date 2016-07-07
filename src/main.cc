@@ -6,6 +6,7 @@
 #include "main.hh"
 #include "options/options.hh"
 #include "grayscale.hh"
+#include "writer.hh"
 
 namespace bpo = boost::program_options;
 
@@ -25,10 +26,10 @@ int main(int argc, char** argv)
   // Get copy.
   auto frames = copy_video(cap);
 
-  launch_pipeline(frames, opt);
+   launch_pipeline(frames, opt);
 
-/*
   cv::namedWindow("w", 1);
+/*
   for (auto& f : frames)
   {
     cv::imshow("w", f);

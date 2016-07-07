@@ -11,7 +11,7 @@ namespace filters
   class Writer : public tbb::filter
   {
     public:
-      Write();
+      Writer();
       // overload of tbb::filter
       void* operator()(void* image);
 

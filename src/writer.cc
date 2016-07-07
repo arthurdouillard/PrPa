@@ -16,6 +16,9 @@ namespace filters
   {
     cv::Mat* input = (cv::Mat*) image;
     // FIXME
+    cv::imshow("w", *input);
+    cv::waitKey(50);
+
     return nullptr;
   }
 }

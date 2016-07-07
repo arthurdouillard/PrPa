@@ -1,5 +1,5 @@
 CC=g++
-SRC=src/main.cc src/options/options.cc src/grayscale.cc
+SRC=src/main.cc src/options/options.cc src/grayscale.cc src/writer.cc
 
 OUT=prpa
 
