@@ -4,6 +4,7 @@
 #include <opencv2/highgui/highgui.hpp>
 
 #include "options/options.hh"
+#include "grayscale.hh"
 
 namespace bpo = boost::program_options;
 
@@ -24,6 +25,15 @@ int main(int argc, char** argv)
   auto frames = copy_video(cap);
 
   launch_pipeline(frames, opt);
+
+  cv::namedWindow("w", 1);
+  for (auto f : frames)
+  {
+    imshow("w", f);
+    waitKey(50);
+  }
+
+  waitKey(0);
 }
 
 
@@ -33,6 +43,12 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
   //std::vector<tbb::filter> filters = get_filters(opt.filter);
 
   tbb::pipeline pipe;
+
+  GrayscaleFilter filter(frames.begin(), frames.end());
+
+  pipe.add_filter(filter)
+  pipe.run(1);
+  pipe.clear();
 }
 
 std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
