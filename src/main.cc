@@ -7,6 +7,7 @@
 #include "options/options.hh"
 #include "filter/grayscale.hh"
 #include "filter/writer.hh"
+#include "filter/modelfilter.hh"
 
 namespace bpo = boost::program_options;
 
@@ -24,7 +25,6 @@ int main(int argc, char** argv)
   }
 
   // Get copy.
-  cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
   auto frames = copy_video(cap);
 
   // Create windows
