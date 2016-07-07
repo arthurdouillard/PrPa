@@ -23,7 +23,9 @@ int main(int argc, char** argv)
   }
 
   // Get copy.
+  std::cout << "Copying video... ";
   auto frames = copy_video(cap);
+  std::cout << "Done !" << std::endl;
 
   launch_pipeline(frames, opt);
 
@@ -45,11 +47,13 @@ void launch_pipeline(std::vector<cv::Mat>& frames, Options& opt)
 
   tbb::pipeline pipe;
 
-  GrayscaleFilter filter(frames.begin(), frames.end());
+  std::cout << "Launching filter" << std::endl;
+  filters::GrayscaleFilter filter(frames.begin(), frames.end());
 
-  pipe.add_filter(filter)
+  pipe.add_filter(filter);
   pipe.run(1);
   pipe.clear();
+  std::cout << "Finish" << std::endl;
 }
 
 std::vector<cv::Mat>& copy_video(cv::VideoCapture& cap)
@@ -62,6 +66,8 @@ std::vector<cv::Mat>& copy_video(cv::VideoCapture& cap)
   while (true)
   {
     cap >> frame;
+    if (frame.empty())
+      break;
     frames.push_back(frame);
   }
 
