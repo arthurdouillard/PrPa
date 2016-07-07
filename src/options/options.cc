@@ -58,6 +58,7 @@ struct Options options_parser(int argc, char** argv)
 void list_filter()
 {
   std::cout << "Filters:"     << std::endl
-            << "* grayscale"  << std::endl;
+            << "* grayscale"  << std::endl
+            << "* sepia" << std::endl;
   exit(0);
 }

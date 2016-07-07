@@ -8,6 +8,7 @@
 #include "filter/grayscale.hh"
 #include "filter/writer.hh"
 #include "filter/modelfilter.hh"
+#include "filter/sepia.hh"
 
 namespace bpo = boost::program_options;
 
@@ -28,7 +29,7 @@ int main(int argc, char** argv)
   auto frames = copy_video(cap);
 
   // Create windows
-  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
+  cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
   // Fill vector of every filters
   auto filters = load_filter(frames, opt);
@@ -66,6 +67,8 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   // Load all filters
   auto gray = std::make_shared<filters::GrayscaleFilter>(mode, frames.begin(), frames.end());
   filters.push_back(gray);
+  auto sepia = std::make_shared<filters::Sepia>(mode, frames.begin(), frames.end());
+  filters.push_back(sepia);
 
   for (auto it = filters.begin(); it != filters.end(); it++)
   {
