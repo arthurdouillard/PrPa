@@ -3,8 +3,9 @@
 
 namespace filters
 {
-  GrayscaleFilter::GrayscaleFilter(frame_iterator first, frame_iterator last)
-    : tbb::filter(tbb::filter::serial_out_of_order)
+  GrayscaleFilter::GrayscaleFilter(tbb::mode mode,
+                                   frame_iterator first, frame_iterator last)
+    : ModelFilter(mode, "grayscale")
     , first_(first)
     , last_(last)
   {}

@@ -8,8 +8,8 @@
 namespace filters
 {
 
-  Writer::Writer()
-    : tbb::filter(tbb::filter::serial_out_of_order)
+  Writer::Writer(tbb::mode mode)
+    : ModelFilter(mode, "writer")
   {}
 
   void* Writer::operator()(void* image)
