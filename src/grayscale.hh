@@ -19,7 +19,6 @@ namespace filters
       frame_iterator first_;
       frame_iterator last_;
       cv::Mat img_;
-
   };
 }
 

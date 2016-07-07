@@ -1,7 +1,3 @@
-#include <tbb/tbb.h>
-#include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/highgui/highgui.hpp>
-#include <iostream>
 #include "grayscale.hh"
 
 
@@ -15,20 +11,19 @@ namespace filters
 
   void* GrayscaleFilter::operator()(void* ptr)
   {
-    cv::Mat frame;
     // end the pipeline after the last image
     if (first_ == last_)
       return nullptr;
     if (ptr != nullptr)
-      frame = *(static_cast<cv::Mat*>(ptr));
+      img_ = *(static_cast<cv::Mat*>(ptr));
     else
-      frame = *first_;
+      img_ = *first_;
 
-    for (int i = 0; i < frame.rows; i++)
+    for (int i = 0; i < img_.rows; i++)
     {
-      for (int j = 0; j < frame.cols; j++)
+      for (int j = 0; j < img_.cols; j++)
       {
-        cv::Vec3b &current_img = frame.at<cv::Vec3b>(i, j);
+        cv::Vec3b &current_img = img_.at<cv::Vec3b>(i, j);
         unsigned char blue = current_img[0]; // B
         unsigned char green = current_img[1]; // G
         unsigned char red = current_img[2]; // R
@@ -39,7 +34,8 @@ namespace filters
       }
     }
     ++first_;
-    return &frame;
+
+    return &img_;
   }
 
 }

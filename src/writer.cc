@@ -14,9 +14,7 @@ namespace filters
 
   void* Writer::operator()(void* image)
   {
-    std::cerr << "to" << std::endl;
     cv::Mat* input = (cv::Mat*) image;
-    // FIXME
     cv::imshow("w", *input);
     if (cv::waitKey(30) > 0)
       return 0;

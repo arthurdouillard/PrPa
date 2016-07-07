@@ -23,11 +23,11 @@ int main(int argc, char** argv)
     exit(1);
   }
 
+  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
   // Get copy.
   auto frames = copy_video(cap);
-  cv::namedWindow("w", cv::WINDOW_AUTOSIZE);
 
-   launch_pipeline(frames, opt);
+  launch_pipeline(frames, opt);
 
 /*
   for (auto& f : frames)
