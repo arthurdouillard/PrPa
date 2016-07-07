@@ -1,7 +1,7 @@
 CC=g++
 SRC=src/main.cc src/options/options.cc src/filter/grayscale.cc \
     src/filter/writer.cc src/filter/modelfilter.cc src/filter/sepia.cc \
-    src/filter/sharpen.cc src/filter/gaussian.cc
+    src/filter/sharpen.cc src/filter/gaussian.cc src/filter/verticalflip.cc
 
 OUT=prpa
 

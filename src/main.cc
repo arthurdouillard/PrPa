@@ -11,6 +11,7 @@
 #include "filter/sepia.hh"
 #include "filter/sharpen.hh"
 #include "filter/gaussian.hh"
+#include "filter/verticalflip.hh"
 
 namespace bpo = boost::program_options;
 
@@ -69,6 +70,7 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   filters.push_back(new filters::Sepia(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Sharpen(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Gaussian(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::VerticalFlip(mode, frames.begin(), frames.end()));
 
   std::vector<filters::ModelFilter*> filtered_filters;
   for (auto it = filters.begin(); it != filters.end(); it++)

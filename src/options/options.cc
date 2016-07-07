@@ -61,6 +61,7 @@ void list_filter()
             << "* grayscale"  << std::endl
             << "* sepia"      << std::endl
             << "* sharpen"    << std::endl
-            << "* gaussian"   << std::endl;
+            << "* gaussian"   << std::endl
+            << "* vflip"      << std::endl;
   exit(0);
 }
