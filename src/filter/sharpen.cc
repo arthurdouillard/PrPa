@@ -49,9 +49,10 @@ namespace filters
         }
 
         auto& out = copy.at<cv::Vec3b>(i, j);
-        out[0] = acc_r < 0 ? 0 : (acc_r > 255 ? 255 : acc_r);
-        out[1] = acc_g < 0 ? 0 : (acc_g > 255 ? 255 : acc_g);
-        out[2] = acc_b < 0 ? 0 : (acc_b > 255 ? 255 : acc_b);
+
+        out[0] = acc_r < 0 ? 0 : acc_r;
+        out[1] = acc_g < 0 ? 0 : acc_g;
+        out[2] = acc_b < 0 ? 0 : acc_b;
       }
     }
     ++first_;
