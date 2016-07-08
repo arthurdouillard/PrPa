@@ -13,6 +13,8 @@
 #include "filter/sharpen.hh"
 #include "filter/gaussian.hh"
 #include "filter/verticalflip.hh"
+#include "timer.hh"
+#include <iomanip>
 
 namespace bpo = boost::program_options;
 
@@ -49,7 +51,21 @@ int main(int argc, char** argv)
   // Create windows
   cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
-  launch_pipeline(load_filter(frames, opt));
+  double time;
+  {
+    scoped_timer t(time);
+    launch_pipeline(load_filter(frames, opt));
+  }
+
+  if (opt.timer)
+  {
+    std::cout << " -----------------------------------------." << std::endl;
+    std::cout << "/     TIME : " << std::setfill(' ') << std::setw(22)
+                                 << time << " sec   |" << std::endl;
+    std::cout << "|     MODE : " << std::setfill(' ') << std::setw(26)
+                                 << opt.mode << "   /" << std::endl;
+    std::cout << " ----------------------------------------- " << std::endl;
+  }
 }
 
 

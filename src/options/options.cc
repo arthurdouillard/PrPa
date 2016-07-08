@@ -11,7 +11,7 @@ struct Options options_parser(int argc, char** argv)
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("mode,m", bpo::value<std::string>()->default_value("so"),
      "Mode choice: so (serial out-of-order), si (serial in-order), pa (parallel)")
-    ("timer,t", bpo::value<bool>()->default_value(false), "Enable timer")
+    ("timer,t", "Enable timer")
     ("list-filter,l", "List of available filter (or other FX)");
 
   bpo::variables_map vm;
@@ -51,11 +51,13 @@ struct Options options_parser(int argc, char** argv)
   if (vm.count("filter"))
     filters = vm["filter"].as<std::vector<std::string>>();
 
+  bool timer_p = vm.count("timer");
+
   Options opt = {
                   vm["video"].as<std::string>(),
                   filters,
                   mode,
-                  vm["timer"].as<bool>()
+                  timer_p
                 };
 
   return opt;

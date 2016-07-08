@@ -1,6 +1,7 @@
 -- TODO --
 
 - Timer option && class
+- Correct the application of multiple videos
 - Overlay
 - parallel for && filter optimisation
 - more filters (convolution, rotations, ...)
@@ -8,6 +9,7 @@
 Improvement (BONUS)
 
 - filter with face recognition and following
+- sound gestion
 - .....
 
 MISC
