@@ -33,13 +33,14 @@ namespace filters
         int acc_g = 0;
         int acc_b = 0;
 
-        for (int row = 0; row < kernel.size(); row++)
+        int x = (int) (i - kernel.size() / 2);
+        int y = (int) (j - kernel.size() / 2);
+
+        for (int row = 0; row < kernel.size(); row++, x++)
         {
-          for (int pos = 0; pos < kernel[row].size(); pos++)
+          for (int pos = 0; pos < kernel[row].size(); pos++, y++)
           {
             int elt = kernel[row][pos];
-            int x = i - row < 0 ? 0 : i - row;
-            int y = j - pos < 0 ? 0 : j - pos;
             auto in = img_.at<cv::Vec3b>(x, y);
 
             acc_r += elt * in[0];
@@ -49,15 +50,15 @@ namespace filters
         }
 
         auto& out = copy.at<cv::Vec3b>(i, j);
-        out[0] = acc_r < 0 ? 0 : (acc_r > 255 ? 255 : acc_r);
-        out[1] = acc_g < 0 ? 0 : (acc_g > 255 ? 255 : acc_g);
-        out[2] = acc_b < 0 ? 0 : (acc_b > 255 ? 255 : acc_b);
 
+        int coef = 16;
+        acc_r = (int)(acc_r / coef);
+        acc_g = (int)(acc_g / coef);
+        acc_b = (int)(acc_b / coef);
 
-        int coef = 9;
-        out[0] = (int)(out[0] / coef);
-        out[1] = (int)(out[1] / coef);
-        out[2] = (int)(out[2] / coef);
+        out[0] = acc_r < 0 ? 0 : acc_r;
+        out[1] = acc_g < 0 ? 0 : acc_g;
+        out[2] = acc_b < 0 ? 0 : acc_b;
 
       }
     }
