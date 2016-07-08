@@ -9,7 +9,8 @@ struct Options options_parser(int argc, char** argv)
     ("help,h", "Display the help")
     ("video,v", bpo::value<std::string>(), "Video file (*.avi)")
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
-    ("mode,m", bpo::value<std::string>(), "Mode choice: so (serial out-of-order), si (serial in-order), pa (parallel)")
+    ("mode,m", bpo::value<std::string>()->default_value("so"),
+     "Mode choice: so (serial out-of-order), si (serial in-order), pa (parallel)")
     ("list-filter,l", "List of available filter (or other FX)");
 
   bpo::variables_map vm;
@@ -32,9 +33,9 @@ struct Options options_parser(int argc, char** argv)
   else if (vm.count("list-filter"))
     list_filter();
 
-  if (!vm.count("video") || !vm.count("filter") || !vm.count("mode"))
+  if (!vm.count("video"))
   {
-    std::cerr << "Video & Filter & Mode options are mandatory !" << std::endl;
+    std::cerr << "CMON ! Give me a video !" << std::endl << desc;
     exit(1);
   }
 
@@ -45,9 +46,13 @@ struct Options options_parser(int argc, char** argv)
     exit(1);
   }
 
+  std::vector<std::string> filters;
+  if (vm.count("filter"))
+    filters = vm["filter"].as<std::vector<std::string>>();
+
   Options opt = {
                   vm["video"].as<std::string>(),
-                  vm["filter"].as<std::vector<std::string>>(),
+                  filters,
                   mode
                 };
 

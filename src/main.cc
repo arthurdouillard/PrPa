@@ -29,6 +29,20 @@ int main(int argc, char** argv)
     exit(1);
   }
 
+  // If no filter, just show the video.
+  if (opt.filter.empty())
+  {
+    cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
+    while (true)
+    {
+      cv::Mat frame;
+      cap >> frame;
+      if (frame.empty())
+        exit(0);
+      cv::imshow("vidz", frame);
+      cv::waitKey(20);
+    }
+  }
   // Get copy.
   auto frames = copy_video(cap);
 
