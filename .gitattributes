@@ -1,0 +1,4 @@
+tests/car.avi filter=lfs diff=lfs merge=lfs -text
+tests/sample.avi filter=lfs diff=lfs merge=lfs -text
+tests/skydivers-stereoscopic.avi filter=lfs diff=lfs merge=lfs -text
+tests/talkinghead.avi filter=lfs diff=lfs merge=lfs -text
