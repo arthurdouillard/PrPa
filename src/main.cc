@@ -6,6 +6,7 @@
 #include "main.hh"
 #include "options/options.hh"
 #include "filter/grayscale.hh"
+#include "filter/binary.hh"
 #include "filter/writer.hh"
 #include "filter/modelfilter.hh"
 #include "filter/sepia.hh"
@@ -67,6 +68,7 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
 
   // Load all filters
   filters.push_back(new filters::GrayscaleFilter(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::Binary(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Sepia(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Sharpen(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Gaussian(mode, frames.begin(), frames.end()));

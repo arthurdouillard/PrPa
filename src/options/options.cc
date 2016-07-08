@@ -59,6 +59,7 @@ void list_filter()
 {
   std::cout << "Filters:"     << std::endl
             << "* grayscale"  << std::endl
+            << "* binary"     << std::endl
             << "* sepia"      << std::endl
             << "* sharpen"    << std::endl
             << "* gaussian"   << std::endl
