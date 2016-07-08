@@ -49,15 +49,33 @@ int main(int argc, char** argv)
   auto frames = copy_video(cap);
 
   // Create windows
-  cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
+  if (!opt.benchmark)
+    cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
+  if (!opt.benchmark)
+    exec(frames, opt);
+  else
+  {
+    std::cout << "Benchmark... Please wait..." << std::endl;
+    std::vector<std::string> modes = { "so", "si", "pa" };
+    for (auto mode : modes)
+    {
+      opt.mode = mode;
+      exec(frames, opt);
+    }
+  }
+}
+
+
+void exec(std::vector<cv::Mat>& frames, Options& opt)
+{
   double time;
   {
     scoped_timer t(time);
     launch_pipeline(load_filter(frames, opt));
   }
 
-  if (opt.timer)
+  if (opt.timer || opt.benchmark)
   {
     std::cout << " -----------------------------------------." << std::endl;
     std::cout << "/     TIME : " << std::setfill(' ') << std::setw(22)
@@ -67,7 +85,6 @@ int main(int argc, char** argv)
     std::cout << " ----------------------------------------- " << std::endl;
   }
 }
-
 
 void
 launch_pipeline(std::vector<filters::ModelFilter*> filters)
@@ -105,9 +122,9 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   filters.push_back(new filters::VerticalFlip(mode, frames.begin(), frames.end()));
 
   std::vector<filters::ModelFilter*> filtered_filters;
-  for (auto it = filters.begin(); it != filters.end(); it++)
+  for (auto& name : opt.filter)
   {
-    for (auto& name : opt.filter)
+    for (auto it = filters.begin(); it != filters.end(); it++)
     {
       if ((*it)->name_get() == name)
       {
@@ -123,8 +140,8 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
     exit(1);
   }
 
-
-  filtered_filters.push_back(new filters::Writer(mode));
+  if (!opt.benchmark)
+    filtered_filters.push_back(new filters::Writer(mode));
 
   return filtered_filters;
 }

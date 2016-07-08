@@ -10,6 +10,7 @@ typedef struct Options
   std::vector<std::string> filter;
   std::string              mode;
   bool                     timer;
+  bool                     benchmark;
 } options;
 
 struct Options options_parser(int argc, char** argv);

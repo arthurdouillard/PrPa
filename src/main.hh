@@ -11,3 +11,6 @@ copy_video(cv::VideoCapture& cap);
 
 std::vector<filters::ModelFilter*>
 load_filter(std::vector<cv::Mat>& frames, Options& opt);
+
+void
+exec(std::vector<cv::Mat>& frames, Options& opt);
