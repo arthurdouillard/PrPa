@@ -16,8 +16,8 @@ namespace filters
   {
     cv::Mat* input = (cv::Mat*) image;
     cv::imshow("vidz", *input);
-    if (cv::waitKey(30) > 0)
-      return 0;
+
+    cv::waitKey(20);
 
     return nullptr;
   }

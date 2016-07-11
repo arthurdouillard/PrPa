@@ -23,7 +23,7 @@ BPO=-lboost_program_options
 TBB=-lrt -ltbb
 
 all:
-	$(CC) $(OPENCV) $(BPO) $(TBB) -o $(OUT) $(SRC)
+	$(CC) $(OPENCV) $(BPO) $(TBB) -O3 -o $(OUT) $(SRC)
 
 debug:
 	$(CC) $(OPENCV) $(BPO) $(TBB) -g3 -O0 -o $(OUT) $(SRC)
