@@ -98,8 +98,7 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
   for (auto& f : filters)
     pipe.add_filter(*f);
 
-  int par = filters.size() == 1 ? filters.size() - 1 : 1;
-
+  int par = filters.size() != 1 ? filters.size() - 1 : 1;
   pipe.run(par);
   pipe.clear();
 }
