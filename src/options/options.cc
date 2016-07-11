@@ -10,7 +10,7 @@ struct Options options_parser(int argc, char** argv)
     ("video,v", bpo::value<std::string>(), "Video file (*.avi)")
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("mode,m", bpo::value<std::string>()->default_value("so"),
-     "Mode choice: so (serial out-of-order), si (serial in-order), pa (parallel)")
+     "Mode choice: so (TBB: serial out-of-order), si (TBB: serial in-order), pa (TBB: parallel), se (sequential)")
     ("timer,t", "Enable timer")
     ("benchmark,b", "Benchmark video for the three modes (so, si, pa)")
     ("list-filter,l", "List of available filter (or other FX)");
@@ -42,9 +42,9 @@ struct Options options_parser(int argc, char** argv)
   }
 
   auto mode = vm["mode"].as<std::string>();
-  if (mode != "so" && mode != "si" && mode != "pa")
+  if (mode != "so" && mode != "si" && mode != "pa" && mode != "se")
   {
-    std::cerr << "Mode should be either: so | si | pa" << std::endl;
+    std::cerr << "Mode should be either: so | si | pa | se" << std::endl;
     exit(1);
   }
 

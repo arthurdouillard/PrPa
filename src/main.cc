@@ -1,22 +1,4 @@
-#include <iostream>
-#include <boost/program_options.hpp>
-#include <opencv2/core/core.hpp>
-#include <opencv2/highgui/highgui.hpp>
-
 #include "main.hh"
-#include "options/options.hh"
-#include "filter/image_overlay.hh"
-#include "filter/grayscale.hh"
-#include "filter/binary.hh"
-#include "filter/writer.hh"
-#include "filter/false_writer.hh"
-#include "filter/modelfilter.hh"
-#include "filter/sepia.hh"
-#include "filter/sharpen.hh"
-#include "filter/gaussian.hh"
-#include "filter/verticalflip.hh"
-#include "timer.hh"
-#include <iomanip>
 
 namespace bpo = boost::program_options;
 
@@ -59,7 +41,7 @@ int main(int argc, char** argv)
   else
   {
     std::cout << "Benchmark... Please wait..." << std::endl;
-    std::vector<std::string> modes = { "so", "si", "pa" };
+    std::vector<std::string> modes = { "so", "si", "pa", "se" };
     for (auto mode : modes)
     {
       opt.mode = mode;
@@ -74,7 +56,10 @@ void exec(std::vector<cv::Mat>& frames, Options& opt)
   double time;
   {
     scoped_timer t(time);
-    launch_pipeline(load_filter(frames, opt), opt);
+    if (opt.mode == "se")
+      exec_seq(frames, opt);
+    else
+      launch_pipeline(load_filter(frames, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -87,6 +72,23 @@ void exec(std::vector<cv::Mat>& frames, Options& opt)
     std::cout << " ----------------------------------------- " << std::endl;
   }
 }
+
+
+void
+exec_seq(std::vector<cv::Mat>& frames, Options& opt)
+{
+  auto filters = load_filter(frames, opt);
+
+  for (auto& frame : frames)
+  {
+    for (auto& filter : filters)
+    {
+      void* ptr = static_cast<void*>(&frame);
+      ptr = (*filter)(ptr);
+    }
+  }
+}
+
 
 void
 launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
@@ -162,6 +164,8 @@ std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
 
   // Copy origin/al video to the new one.
   cv::Mat frame;
+  std::cout << "Copying video...";
+
   while (true)
   {
     cap >> frame;
@@ -169,5 +173,8 @@ std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
       break;
     frames.push_back(frame.clone());
   }
+
+  std::cout << " Done !" << std::endl;
+
   return frames;
 }
