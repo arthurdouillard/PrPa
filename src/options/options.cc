@@ -69,12 +69,13 @@ struct Options options_parser(int argc, char** argv)
 
 void list_filter()
 {
-  std::cout << "Filters:"     << std::endl
-            << "* grayscale"  << std::endl
-            << "* binary"     << std::endl
-            << "* sepia"      << std::endl
-            << "* sharpen"    << std::endl
-            << "* gaussian"   << std::endl
-            << "* vflip"      << std::endl;
+  std::cout << "Filters:"      << std::endl
+            << "* img_overlay" << std::endl
+            << "* grayscale"   << std::endl
+            << "* binary"      << std::endl
+            << "* sepia"       << std::endl
+            << "* sharpen"     << std::endl
+            << "* gaussian"    << std::endl
+            << "* vflip"       << std::endl;
   exit(0);
 }

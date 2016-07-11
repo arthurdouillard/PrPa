@@ -5,6 +5,7 @@
 
 #include "main.hh"
 #include "options/options.hh"
+#include "filter/image_overlay.hh"
 #include "filter/grayscale.hh"
 #include "filter/binary.hh"
 #include "filter/writer.hh"
@@ -115,7 +116,10 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
 
   std::vector<filters::ModelFilter*> filters;
 
+  cv::Mat overlay = cv::imread("tests/overlay.png", CV_LOAD_IMAGE_COLOR);
+
   // Load all filters
+  filters.push_back(new filters::ImageOverlay(mode, frames.begin(), frames.end(), overlay));
   filters.push_back(new filters::GrayscaleFilter(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Binary(mode, frames.begin(), frames.end()));
   filters.push_back(new filters::Sepia(mode, frames.begin(), frames.end()));
