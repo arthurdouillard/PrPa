@@ -17,6 +17,7 @@
 #include "filter/sharpen.hh"
 #include "filter/gaussian.hh"
 #include "filter/verticalflip.hh"
+#include "filter/image_overlay.hh"
 #include "timer.hh"
 
 void
