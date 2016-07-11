@@ -8,6 +8,7 @@
 #include "filter/grayscale.hh"
 #include "filter/binary.hh"
 #include "filter/writer.hh"
+#include "filter/false_writer.hh"
 #include "filter/modelfilter.hh"
 #include "filter/sepia.hh"
 #include "filter/sharpen.hh"
@@ -72,7 +73,7 @@ void exec(std::vector<cv::Mat>& frames, Options& opt)
   double time;
   {
     scoped_timer t(time);
-    launch_pipeline(load_filter(frames, opt));
+    launch_pipeline(load_filter(frames, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -87,7 +88,7 @@ void exec(std::vector<cv::Mat>& frames, Options& opt)
 }
 
 void
-launch_pipeline(std::vector<filters::ModelFilter*> filters)
+launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
 {
   tbb::pipeline pipe;
 
@@ -95,6 +96,7 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters)
     pipe.add_filter(*f);
 
   int par = filters.size() == 1 ? filters.size() - 1 : 1;
+
   pipe.run(par);
   pipe.clear();
 }
@@ -142,6 +144,8 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
 
   if (!opt.benchmark)
     filtered_filters.push_back(new filters::Writer(mode));
+  else
+    filtered_filters.push_back(new filters::FalseWriter(mode));
 
   return filtered_filters;
 }

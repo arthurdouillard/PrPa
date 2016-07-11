@@ -4,7 +4,7 @@
 #include "filter/modelfilter.hh"
 
 void
-launch_pipeline(std::vector<filters::ModelFilter*> filters);
+launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt);
 
 std::vector<cv::Mat>
 copy_video(cv::VideoCapture& cap);

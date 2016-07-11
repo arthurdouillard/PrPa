@@ -8,7 +8,8 @@ SRC=src/main.cc                  \
     src/filter/binary.cc         \
     src/filter/sharpen.cc        \
     src/filter/gaussian.cc       \
-    src/filter/verticalflip.cc
+    src/filter/verticalflip.cc   \
+    src/filter/false_writer.cc
 
 OUT=prpa
 
