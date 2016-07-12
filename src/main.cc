@@ -43,7 +43,7 @@ int main(int argc, char** argv)
   else
   {
     std::cout << "Benchmark... Please wait..." << std::endl;
-    std::vector<std::string> modes = { "so", "si", "pa" };
+    std::vector<std::string> modes = { "se", "pa" };
     for (auto mode : modes)
     {
       opt.mode = mode;
@@ -105,14 +105,7 @@ launch_seq(std::vector<filters::ModelFilter*> filters)
 std::vector<filters::ModelFilter*>
 load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
 {
-  tbb::filter::mode mode;
-  if (opt.mode == "so")
-    mode = tbb::filter::serial_out_of_order;
-  else if (opt.mode == "si")
-    mode = tbb::filter::serial_in_order;
-  else
-    mode = tbb::filter::parallel;
-
+  tbb::filter::mode mode = tbb::filter::parallel;
   std::vector<filters::ModelFilter*> filters;
 
   cv::Mat overlay = cv::imread("tests/overlay.png", CV_LOAD_IMAGE_COLOR);
