@@ -14,6 +14,14 @@ namespace filters
 
     cv::Mat* ans = new cv::Mat;
 
+    if (caps_.size() == 1)
+    {
+      cv::Mat f;
+      (*caps_.front()) >> f;
+      f.copyTo(*ans);
+      return ans;
+    }
+
     cv::Mat f1;
     cv::Mat f2;
     (*caps_.front()) >> f1;
@@ -24,7 +32,7 @@ namespace filters
     else if (!f1.empty() && f2.empty())
       f1.copyTo(*ans);
     else if (!f2.empty() && f1.empty())
-      f2.copyTo(*ans);
+      return nullptr;
     else // none is empty
     {
       f1.copyTo(*ans);
@@ -44,7 +52,6 @@ namespace filters
             r /= 255;
             g /= 255;
             b /= 255;
-
 
             pixel[0] = r;
             pixel[1] = g;
