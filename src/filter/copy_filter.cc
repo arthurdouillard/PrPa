@@ -18,6 +18,8 @@ namespace filters
     {
       cv::Mat f;
       (*caps_.front()) >> f;
+      if (f.empty())
+        return nullptr;
       f.copyTo(*ans);
       return ans;
     }
