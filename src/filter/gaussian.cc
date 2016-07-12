@@ -17,7 +17,7 @@ namespace filters
     };
 
     cv::Mat* copy = new cv::Mat;
-    img.copyTo(*copy);
+    img->copyTo(*copy);
 
     for (int i = 1; i < img->rows - 1; i++)
     {
@@ -56,7 +56,6 @@ namespace filters
 
       }
     }
-    ++first_;
 
     return img;
   }

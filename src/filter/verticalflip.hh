@@ -7,20 +7,12 @@
 
 namespace filters
 {
-  using frame_iterator = std::vector<cv::Mat>::iterator;
-
   class VerticalFlip : public ModelFilter
   {
     public:
-      VerticalFlip(tbb::filter::mode, frame_iterator first,
-            frame_iterator last);
+      VerticalFlip(tbb::filter::mode);
       // overload of tbb::filter
       void* operator()(void* image);
-
-    private:
-      frame_iterator first_;
-      frame_iterator last_;
-      cv::Mat img_;
   };
 }
 

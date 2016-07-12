@@ -5,35 +5,25 @@
 
 namespace filters
 {
-  VerticalFlip::VerticalFlip(tbb::filter::mode mode,
-               frame_iterator first, frame_iterator last)
+  VerticalFlip::VerticalFlip(tbb::filter::mode mode)
     : ModelFilter(mode, "vflip")
-    , first_(first)
-    , last_(last)
   {}
 
   void* VerticalFlip::operator()(void* ptr)
   {
-    // end the pipeline after the last image
-    if (first_ == last_)
-      return nullptr;
-    if (ptr != nullptr)
-      img_ = *(static_cast<cv::Mat*>(ptr));
-    else
-      img_ = *first_;
 
-    cv::Mat rotated(img_.rows, img_.cols, img_.type());
+    cv::Mat* img = (cv::Mat*) ptr;
+    cv::Mat* rotated = new cv::Mat(img->rows, img->cols, img->type());
 
-    for (int i = 0; i < img_.cols; i++)
+    for (int i = 0; i < img->cols; i++)
     {
-      for (int j = 0; j < img_.rows; j++)
+      for (int j = 0; j < img->rows; j++)
       {
-        rotated.at<cv::Vec3b>(j, img_.cols - 1 - i) = img_.at<cv::Vec3b>(j, i);
+        rotated->at<cv::Vec3b>(j, img->cols - 1 - i) = img->at<cv::Vec3b>(j, i);
       }
     }
-    ++first_;
-    img_ = rotated;
-    return &img_;
+
+    return rotated;
   }
 
 }
