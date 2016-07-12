@@ -50,18 +50,21 @@ int main(int argc, char** argv)
       exec(caps, opt);
     }
   }
+
+  // CLEANUP
+  for (auto i : caps)
+    delete i;
+
 }
 
 
 void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
 {
+  std::vector<filters::ModelFilter*> filtz = load_filter(caps, opt);
   double time;
   {
     scoped_timer t(time);
-    if (opt.mode == "se")
-      launch_seq(load_filter(caps, opt));
-    else
-      launch_pipeline(load_filter(caps, opt), opt);
+    launch_pipeline(filtz, opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -73,6 +76,10 @@ void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
                                  << opt.mode << "   /" << std::endl;
     std::cout << " ----------------------------------------- " << std::endl;
   }
+
+  // CLEANUP
+  for (auto i : filtz)
+    delete i;
 }
 
 void
@@ -134,6 +141,7 @@ load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
     }
   }
 
+
   if (filtered_filters.size() == 0)
   {
     std::cerr << "No valid filters were given." << std::endl;
@@ -144,6 +152,18 @@ load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
     filtered_filters.push_back(new filters::Writer(tbb::filter::serial_in_order));
   else
     filtered_filters.push_back(new filters::FalseWriter(tbb::filter::serial_in_order));
+
+  // CLEANUP
+  for (auto i : filters)
+  {
+    for (auto j : filtered_filters)
+    {
+      if (i == j)
+        break;
+      else if (j == filtered_filters.back())
+        delete i;
+    }
+  }
 
   return filtered_filters;
 }
