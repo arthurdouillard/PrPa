@@ -7,7 +7,7 @@ struct Options options_parser(int argc, char** argv)
   bpo::options_description desc("Options");
   desc.add_options()
     ("help,h", "Display the help")
-    ("video,v", bpo::value<std::vector<std::string>>(), "Video file (*.avi)")
+    ("video,v", bpo::value<std::vector<std::string>>()->multitoken(), "Video file (*.avi)")
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("mode,m", bpo::value<std::string>()->default_value("pa"),
      "Mode choice: pa (TBB: parallel) | se (sequential)")
