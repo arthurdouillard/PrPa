@@ -10,6 +10,8 @@ namespace filters
 
       void* operator()(void* image);
 
+      cv::Mat* merge_mat(cv::Mat* f1, cv::Mat f2);
+
     private:
       std::vector<cv::VideoCapture*> caps_;
   };
