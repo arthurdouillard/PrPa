@@ -21,6 +21,7 @@
 #include "filter/image_overlay.hh"
 #include "filter/copy_filter.hh"
 #include "filter/emboss.hh"
+#include "filter/edge.hh"
 #include "timer.hh"
 
 void

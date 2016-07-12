@@ -80,6 +80,7 @@ void list_filter()
             << "* sharpen"     << std::endl
             << "* gaussian"    << std::endl
             << "* emboss"      << std::endl
+            << "* edge"        << std::endl
             << "* vflip"       << std::endl;
   exit(0);
 }
