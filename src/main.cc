@@ -58,7 +58,10 @@ void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
   double time;
   {
     scoped_timer t(time);
-    launch_pipeline(load_filter(caps, opt), opt);
+    if (opt.mode == "se")
+      launch_seq(load_filter(cap, opt));
+    else
+      launch_pipeline(load_filter(cap, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -83,6 +86,24 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
   pipe.run(std::thread::hardware_concurrency());
   pipe.clear();
 }
+
+void
+launch_seq(std::vector<filters::ModelFilter*> filters)
+{
+  auto filter = filters.front();
+  auto frame = filter->operator()(nullptr);
+
+  filters.erase(filters.begin());
+
+  do
+  {
+    for (auto f : filters)
+      f->operator()(frame);
+
+    frame = filter->operator()(nullptr);
+  } while (!frame);
+}
+
 
 std::vector<filters::ModelFilter*>
 load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
