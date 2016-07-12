@@ -90,18 +90,15 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
 void
 launch_seq(std::vector<filters::ModelFilter*> filters)
 {
-  auto filter = filters.front();
-  auto frame = filter->operator()(nullptr);
-
-  filters.erase(filters.begin());
+  auto frame = filters[0]->operator()(nullptr);
 
   do
   {
-    for (auto f : filters)
-      f->operator()(frame);
+    for (int i = 1; i < filters.size(); ++i)
+      frame = filters[i]->operator()(frame);
 
-    frame = filter->operator()(nullptr);
-  } while (!frame);
+    frame = filters[0]->operator()(nullptr);
+  } while (frame);
 }
 
 
