@@ -7,20 +7,12 @@
 
 namespace filters
 {
-  using frame_iterator = std::vector<cv::Mat>::iterator;
-
   class GrayscaleFilter : public ModelFilter
   {
     public:
-      GrayscaleFilter(tbb::filter::mode, frame_iterator first,
-                      frame_iterator last);
+      GrayscaleFilter(tbb::filter::mode);
       // overload of tbb::filter
       void* operator()(void* image);
-
-    private:
-      frame_iterator first_;
-      frame_iterator last_;
-      cv::Mat img_;
   };
 }
 

@@ -3,28 +3,20 @@
 
 namespace filters
 {
-  GrayscaleFilter::GrayscaleFilter(tbb::filter::mode mode,
-                                   frame_iterator first, frame_iterator last)
+  GrayscaleFilter::GrayscaleFilter(tbb::filter::mode mode)
     : ModelFilter(mode, "grayscale")
-    , first_(first)
-    , last_(last)
   {}
 
   void* GrayscaleFilter::operator()(void* ptr)
   {
     // end the pipeline after the last image
-    if (first_ == last_)
-      return nullptr;
-    if (ptr != nullptr)
-      img_ = *(static_cast<cv::Mat*>(ptr));
-    else
-      img_ = *first_;
+    cv::Mat* img = (cv::Mat*) ptr;
 
-    for (int i = 0; i < img_.rows; i++)
+    for (int i = 0; i < img->rows; i++)
     {
-      for (int j = 0; j < img_.cols; j++)
+      for (int j = 0; j < img->cols; j++)
       {
-        cv::Vec3b &current_img = img_.at<cv::Vec3b>(i, j);
+        cv::Vec3b &current_img = img->at<cv::Vec3b>(i, j);
         unsigned char blue = current_img[0]; // R
         unsigned char green = current_img[1]; // G
         unsigned char red = current_img[2]; // B
@@ -34,9 +26,8 @@ namespace filters
         current_img[2] = (blue + red + green) / 3;
       }
     }
-    ++first_;
 
-    return &img_;
+    return img;
   }
 
 }
