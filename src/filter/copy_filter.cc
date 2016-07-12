@@ -35,7 +35,7 @@ namespace filters
       (*caps_[i]) >> f2;
 
       if (f2.empty())
-        continue;
+        (*caps_[i]).set(CV_CAP_PROP_POS_FRAMES, 0);
 
       ans = merge_mat(ans, f2);
     }
