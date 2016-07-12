@@ -2,20 +2,14 @@
 
 namespace filters
 {
-  Sharpen::Sharpen(tbb::filter::mode mode,
-                   frame_iterator first, frame_iterator last)
+  Sharpen::Sharpen(tbb::filter::mode mode)
     : ModelFilter(mode, "sharpen")
-    , first_(first)
-    , last_(last)
   {}
 
   void* Sharpen::operator()(void* ptr)
   {
     // end the pipeline after the last image
-    if (first_ == last_)
-      return nullptr;
-
-    img_ = (ptr != nullptr) ? *(static_cast<cv::Mat*>(ptr)) : *first_;
+    cv::Mat* img = (cv::Mat*) ptr;
 
     std::vector<std::vector<float>> kernel = {
       { 0, -1, 0 },
@@ -23,11 +17,12 @@ namespace filters
       { 0, -1, 0 }
     };
 
-    cv::Mat copy = img_.clone();
+    cv::Mat* copy = new cv::Mat;
+    img->copyTo(*copy);
 
-    for (int i = 1; i < img_.rows - 1; i++)
+    for (int i = 1; i < img->rows - 1; i++)
     {
-      for (int j = 1; j < img_.cols - 1; j++)
+      for (int j = 1; j < img->cols - 1; j++)
       {
         int acc_r = 0;
         int acc_g = 0;
@@ -40,7 +35,7 @@ namespace filters
             int elt = kernel[row][pos];
             int x = i - row < 0 ? 0 : i - row;
             int y = j - pos < 0 ? 0 : j - pos;
-            auto in = img_.at<cv::Vec3b>(x, y);
+            auto in = copy->at<cv::Vec3b>(x, y);
 
             acc_r += elt * in[0];
             acc_g += elt * in[1];
@@ -48,18 +43,15 @@ namespace filters
           }
         }
 
-        auto& out = copy.at<cv::Vec3b>(i, j);
+        auto& out = img->at<cv::Vec3b>(i, j);
 
         out[0] = acc_r < 0 ? 0 : acc_r;
         out[1] = acc_g < 0 ? 0 : acc_g;
         out[2] = acc_b < 0 ? 0 : acc_b;
       }
     }
-    ++first_;
 
-    img_ = copy;
-
-    return &img_;
+    return img;
   }
 
 }

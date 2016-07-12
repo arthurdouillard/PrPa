@@ -12,13 +12,8 @@ namespace filters
   class Sharpen : public ModelFilter
   {
     public:
-      Sharpen(tbb::filter::mode, frame_iterator first, frame_iterator last);
+      Sharpen(tbb::filter::mode);
       void *operator()(void* image);
-
-    private:
-      frame_iterator first_;
-      frame_iterator last_;
-      cv::Mat img_;
   };
 
 } // filters
