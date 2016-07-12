@@ -59,9 +59,9 @@ void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
   {
     scoped_timer t(time);
     if (opt.mode == "se")
-      launch_seq(load_filter(cap, opt));
+      launch_seq(load_filter(caps, opt));
     else
-      launch_pipeline(load_filter(cap, opt), opt);
+      launch_pipeline(load_filter(caps, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
