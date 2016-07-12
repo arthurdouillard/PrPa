@@ -22,7 +22,7 @@
 #include "timer.hh"
 
 void
-launch_pipeline(cv::VideoCapture& cap, Options& opt);
+launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt);
 
 std::vector<filters::ModelFilter*>
 load_filter(cv::VideoCapture& cap, Options& opt);
