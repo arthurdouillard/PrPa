@@ -22,6 +22,7 @@
 #include "filter/copy_filter.hh"
 #include "filter/emboss.hh"
 #include "filter/edge.hh"
+#include "filter/invert.hh"
 #include "timer.hh"
 
 void

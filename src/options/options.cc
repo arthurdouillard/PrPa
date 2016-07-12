@@ -81,6 +81,7 @@ void list_filter()
             << "* gaussian"    << std::endl
             << "* emboss"      << std::endl
             << "* edge"        << std::endl
+            << "* invert"      << std::endl
             << "* vflip"       << std::endl;
   exit(0);
 }

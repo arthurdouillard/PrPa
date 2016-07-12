@@ -13,6 +13,7 @@ SRC=src/main.cc                  \
     src/filter/false_writer.cc   \
     src/filter/copy_filter.cc    \
     src/filter/emboss.cc         \
+    src/filter/invert.cc         \
     src/filter/edge.cc
 
 OUT=prpa

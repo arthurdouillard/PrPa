@@ -64,7 +64,10 @@ void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
   double time;
   {
     scoped_timer t(time);
-    launch_pipeline(filtz, opt);
+    if (opt.mode == "se")
+      launch_seq(filtz);
+    else
+      launch_pipeline(filtz, opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -127,6 +130,7 @@ load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
   filters.push_back(new filters::VerticalFlip(mode));
   filters.push_back(new filters::Emboss(mode));
   filters.push_back(new filters::Edge(mode));
+  filters.push_back(new filters::Invert(mode));
 
   std::vector<filters::ModelFilter*> filtered_filters;
   filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order, caps));
