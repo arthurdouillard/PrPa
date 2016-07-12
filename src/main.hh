@@ -18,19 +18,14 @@
 #include "filter/gaussian.hh"
 #include "filter/verticalflip.hh"
 #include "filter/image_overlay.hh"
+#include "filter/copy_filter.hh"
 #include "timer.hh"
 
 void
-launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt);
-
-std::vector<cv::Mat>
-copy_video(cv::VideoCapture& cap);
+launch_pipeline(cv::VideoCapture& cap, Options& opt);
 
 std::vector<filters::ModelFilter*>
-load_filter(std::vector<cv::Mat>& frames, Options& opt);
+load_filter(cv::VideoCapture& cap, Options& opt);
 
 void
 exec(std::vector<cv::Mat>& frames, Options& opt);
-
-void
-exec_seq(std::vector<cv::Mat>& frames, Options& opt);

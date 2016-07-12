@@ -9,8 +9,9 @@ SRC=src/main.cc                  \
     src/filter/sharpen.cc        \
     src/filter/gaussian.cc       \
     src/filter/verticalflip.cc   \
-	src/filter/image_overlay.cc  \
-    src/filter/false_writer.cc
+    src/filter/image_overlay.cc  \
+    src/filter/false_writer.cc   \
+    src/filter/copy_filter.cc
 
 OUT=prpa
 

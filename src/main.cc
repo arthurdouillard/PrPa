@@ -29,37 +29,32 @@ int main(int argc, char** argv)
       cv::waitKey(20);
     }
   }
-  // Get copy.
-  auto frames = copy_video(cap);
 
   // Create windows
   if (!opt.benchmark)
     cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
   if (!opt.benchmark)
-    exec(frames, opt);
+    exec(cap, opt);
   else
   {
     std::cout << "Benchmark... Please wait..." << std::endl;
-    std::vector<std::string> modes = { "so", "si", "pa", "se" };
+    std::vector<std::string> modes = { "so", "si", "pa" };
     for (auto mode : modes)
     {
       opt.mode = mode;
-      exec(frames, opt);
+      exec(cap, opt);
     }
   }
 }
 
 
-void exec(std::vector<cv::Mat>& frames, Options& opt)
+void exec(cv::VideoCapture& cap, Options& opt)
 {
   double time;
   {
     scoped_timer t(time);
-    if (opt.mode == "se")
-      exec_seq(frames, opt);
-    else
-      launch_pipeline(load_filter(frames, opt), opt);
+    launch_pipeline(load_filter(cap, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -72,23 +67,6 @@ void exec(std::vector<cv::Mat>& frames, Options& opt)
     std::cout << " ----------------------------------------- " << std::endl;
   }
 }
-
-
-void
-exec_seq(std::vector<cv::Mat>& frames, Options& opt)
-{
-  auto filters = load_filter(frames, opt);
-
-  for (auto& frame : frames)
-  {
-    for (auto& filter : filters)
-    {
-      void* ptr = static_cast<void*>(&frame);
-      ptr = (*filter)(ptr);
-    }
-  }
-}
-
 
 void
 launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
@@ -120,15 +98,16 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   cv::Mat overlay = cv::imread("tests/overlay.png", CV_LOAD_IMAGE_COLOR);
 
   // Load all filters
-  filters.push_back(new filters::ImageOverlay(mode, frames.begin(), frames.end(), overlay));
-  filters.push_back(new filters::GrayscaleFilter(mode, frames.begin(), frames.end()));
-  filters.push_back(new filters::Binary(mode, frames.begin(), frames.end()));
-  filters.push_back(new filters::Sepia(mode, frames.begin(), frames.end()));
-  filters.push_back(new filters::Sharpen(mode, frames.begin(), frames.end()));
-  filters.push_back(new filters::Gaussian(mode, frames.begin(), frames.end()));
-  filters.push_back(new filters::VerticalFlip(mode, frames.begin(), frames.end()));
+  filters.push_back(new filters::ImageOverlay(mode, overlay));
+  filters.push_back(new filters::GrayscaleFilter(mode));
+  filters.push_back(new filters::Binary(mode));
+  filters.push_back(new filters::Sepia(mode));
+  filters.push_back(new filters::Sharpen(mode));
+  filters.push_back(new filters::Gaussian(mode));
+  filters.push_back(new filters::VerticalFlip(mode));
 
   std::vector<filters::ModelFilter*> filtered_filters;
+  filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order)
   for (auto& name : opt.filter)
   {
     for (auto it = filters.begin(); it != filters.end(); it++)
@@ -148,32 +127,9 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   }
 
   if (!opt.benchmark)
-    filtered_filters.push_back(new filters::Writer(mode));
+    filtered_filters.push_back(new filters::Writer(tbb::filter::serial_in_order));
   else
-    filtered_filters.push_back(new filters::FalseWriter(mode));
+    filtered_filters.push_back(new filters::FalseWriter(tbb::filter::serial_in_order));
 
   return filtered_filters;
-}
-
-
-std::vector<cv::Mat> copy_video(cv::VideoCapture& cap)
-{
-  // New video frames.
-  std::vector<cv::Mat> frames;
-
-  // Copy origin/al video to the new one.
-  cv::Mat frame;
-  std::cout << "Copying video...";
-
-  while (true)
-  {
-    cap >> frame;
-    if (frame.empty())
-      break;
-    frames.push_back(frame.clone());
-  }
-
-  std::cout << " Done !" << std::endl;
-
-  return frames;
 }
