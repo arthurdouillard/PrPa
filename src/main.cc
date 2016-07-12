@@ -83,7 +83,7 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
 
 
 std::vector<filters::ModelFilter*>
-load_filter(std::vector<cv::Mat>& frames, Options& opt)
+load_filter(cv::VideoCapture& cap, Options& opt)
 {
   tbb::filter::mode mode;
   if (opt.mode == "so")
@@ -107,7 +107,7 @@ load_filter(std::vector<cv::Mat>& frames, Options& opt)
   filters.push_back(new filters::VerticalFlip(mode));
 
   std::vector<filters::ModelFilter*> filtered_filters;
-  filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order)
+  filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order, cap));
   for (auto& name : opt.filter)
   {
     for (auto it = filters.begin(); it != filters.end(); it++)

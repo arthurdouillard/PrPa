@@ -28,4 +28,4 @@ std::vector<filters::ModelFilter*>
 load_filter(cv::VideoCapture& cap, Options& opt);
 
 void
-exec(std::vector<cv::Mat>& frames, Options& opt);
+exec(cv::VideoCapture& cap, Options& opt);

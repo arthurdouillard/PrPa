@@ -2,20 +2,13 @@
 
 namespace filters
 {
-  Gaussian::Gaussian(tbb::filter::mode mode,
-                     frame_iterator first, frame_iterator last)
+  Gaussian::Gaussian(tbb::filter::mode mode)
     : ModelFilter(mode, "gaussian")
-    , first_(first)
-    , last_(last)
   {}
 
   void* Gaussian::operator()(void* ptr)
   {
-    // end the pipeline after the last image
-    if (first_ == last_)
-      return nullptr;
-
-    img_ = (ptr != nullptr) ? *(static_cast<cv::Mat*>(ptr)) : *first_;
+    cv::Mat* img = (cv::Mat*) ptr;
 
     std::vector<std::vector<float>> kernel = {
       { 1, 2, 1 },
@@ -23,11 +16,12 @@ namespace filters
       { 1, 2, 1 }
     };
 
-    cv::Mat copy = img_.clone();
+    cv::Mat* copy = new cv::Mat;
+    img.copyTo(*copy);
 
-    for (int i = 1; i < img_.rows - 1; i++)
+    for (int i = 1; i < img->rows - 1; i++)
     {
-      for (int j = 1; j < img_.cols - 1; j++)
+      for (int j = 1; j < img->cols - 1; j++)
       {
         int acc_r = 0;
         int acc_g = 0;
@@ -41,7 +35,7 @@ namespace filters
           for (int pos = 0; pos < kernel[row].size(); pos++, y++)
           {
             int elt = kernel[row][pos];
-            auto in = img_.at<cv::Vec3b>(x, y);
+            auto in = copy->at<cv::Vec3b>(x, y);
 
             acc_r += elt * in[0];
             acc_g += elt * in[1];
@@ -49,7 +43,7 @@ namespace filters
           }
         }
 
-        auto& out = copy.at<cv::Vec3b>(i, j);
+        auto& out = img->at<cv::Vec3b>(i, j);
 
         int coef = 16;
         acc_r = (int)(acc_r / coef);
@@ -64,9 +58,7 @@ namespace filters
     }
     ++first_;
 
-    img_ = copy;
-
-    return &img_;
+    return img;
   }
 
 }

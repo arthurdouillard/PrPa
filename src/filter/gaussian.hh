@@ -7,18 +7,11 @@
 
 namespace filters
 {
-  using frame_iterator = std::vector<cv::Mat>::iterator;
-
   class Gaussian : public ModelFilter
   {
     public:
-      Gaussian(tbb::filter::mode, frame_iterator first, frame_iterator last);
+      Gaussian(tbb::filter::mode);
       void *operator()(void* image);
-
-    private:
-      frame_iterator first_;
-      frame_iterator last_;
-      cv::Mat img_;
   };
 
 } // filters
