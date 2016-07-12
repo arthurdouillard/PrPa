@@ -7,12 +7,16 @@ int main(int argc, char** argv)
   Options opt = options_parser(argc, argv);
 
   // Get input video.
-  cv::VideoCapture cap(opt.video);
-
-  if (!cap.isOpened())
+  std::vector<cv::VideoCapture*> caps;
+  for (auto& v : opt.video)
   {
-    std::cerr << "Error when reading video." << std::endl;
-    exit(1);
+    caps.push_back(new cv::VideoCapture(v));
+
+    if (!caps.back()->isOpened())
+    {
+      std::cerr << "Error when reading video." << std::endl;
+      exit(1);
+    }
   }
 
   // If no filter, just show the video.
@@ -22,7 +26,7 @@ int main(int argc, char** argv)
     while (true)
     {
       cv::Mat frame;
-      cap >> frame;
+      (*caps.front()) >> frame;
       if (frame.empty())
         exit(0);
       cv::imshow("vidz", frame);
@@ -35,7 +39,7 @@ int main(int argc, char** argv)
     cv::namedWindow("vidz", cv::WINDOW_AUTOSIZE);
 
   if (!opt.benchmark)
-    exec(cap, opt);
+    exec(caps, opt);
   else
   {
     std::cout << "Benchmark... Please wait..." << std::endl;
@@ -43,18 +47,18 @@ int main(int argc, char** argv)
     for (auto mode : modes)
     {
       opt.mode = mode;
-      exec(cap, opt);
+      exec(caps, opt);
     }
   }
 }
 
 
-void exec(cv::VideoCapture& cap, Options& opt)
+void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
 {
   double time;
   {
     scoped_timer t(time);
-    launch_pipeline(load_filter(cap, opt), opt);
+    launch_pipeline(load_filter(caps, opt), opt);
   }
 
   if (opt.timer || opt.benchmark)
@@ -80,9 +84,8 @@ launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt)
   pipe.clear();
 }
 
-
 std::vector<filters::ModelFilter*>
-load_filter(cv::VideoCapture& cap, Options& opt)
+load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
 {
   tbb::filter::mode mode;
   if (opt.mode == "so")
@@ -107,7 +110,7 @@ load_filter(cv::VideoCapture& cap, Options& opt)
   filters.push_back(new filters::Emboss(mode));
 
   std::vector<filters::ModelFilter*> filtered_filters;
-  filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order, cap));
+  filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order, caps));
   for (auto& name : opt.filter)
   {
     for (auto it = filters.begin(); it != filters.end(); it++)

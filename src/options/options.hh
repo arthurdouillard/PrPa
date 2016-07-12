@@ -6,7 +6,7 @@
 
 typedef struct Options
 {
-  std::string              video;
+  std::vector<std::string> video;
   std::vector<std::string> filter;
   std::string              mode;
   bool                     timer;

@@ -27,7 +27,7 @@ void
 launch_pipeline(std::vector<filters::ModelFilter*> filters, Options& opt);
 
 std::vector<filters::ModelFilter*>
-load_filter(cv::VideoCapture& cap, Options& opt);
+load_filter(std::vector<cv::VideoCapture*> caps, Options& opt);
 
 void
-exec(cv::VideoCapture& cap, Options& opt);
+exec(std::vector<cv::VideoCapture*> cap, Options& opt);
