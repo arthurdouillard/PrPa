@@ -20,6 +20,7 @@
 #include "filter/verticalflip.hh"
 #include "filter/image_overlay.hh"
 #include "filter/copy_filter.hh"
+#include "filter/emboss.hh"
 #include "timer.hh"
 
 void

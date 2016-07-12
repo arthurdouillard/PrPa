@@ -104,6 +104,7 @@ load_filter(cv::VideoCapture& cap, Options& opt)
   filters.push_back(new filters::Sharpen(mode));
   filters.push_back(new filters::Gaussian(mode));
   filters.push_back(new filters::VerticalFlip(mode));
+  filters.push_back(new filters::Emboss(mode));
 
   std::vector<filters::ModelFilter*> filtered_filters;
   filtered_filters.push_back(new filters::CopyFilter(tbb::filter::serial_in_order, cap));

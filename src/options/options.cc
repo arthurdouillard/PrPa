@@ -76,6 +76,7 @@ void list_filter()
             << "* sepia"       << std::endl
             << "* sharpen"     << std::endl
             << "* gaussian"    << std::endl
+            << "* emboss"      << std::endl
             << "* vflip"       << std::endl;
   exit(0);
 }
