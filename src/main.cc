@@ -153,13 +153,8 @@ load_filter(std::vector<cv::VideoCapture*> caps, Options& opt)
     exit(1);
   }
 
-  if (!opt.benchmark && opt.dst.length() == 0)
+  if (!opt.benchmark)
     filtered_filters.push_back(new filters::Writer(tbb::filter::serial_in_order));
-  else if (opt.dst.length() != 0)
-    filtered_filters.push_back(new filters::TrueWriter(tbb::filter::serial_in_order,
-                                                       opt.dst,
-                                                       *caps.front(),
-                                                       opt));
   else
     filtered_filters.push_back(new filters::FalseWriter(tbb::filter::serial_in_order));
 

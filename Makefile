@@ -14,8 +14,7 @@ SRC=src/main.cc                  \
     src/filter/copy_filter.cc    \
     src/filter/emboss.cc         \
     src/filter/invert.cc         \
-    src/filter/edge.cc           \
-    src/filter/true_writer.cc
+    src/filter/edge.cc
 
 OUT=prpa
 
@@ -30,9 +29,10 @@ BPO=-lboost_program_options
 TBB=-lrt -ltbb
 
 all:
-	$(CC) $(OPENCV) $(BPO) $(TBB) -O3 -o $(OUT) $(SRC)
+	@echo "Compiling Vidz bro !"
+	@$(CC) $(OPENCV) $(BPO) $(TBB) -O3 -o $(OUT) $(SRC)
 
 debug:
-	$(CC) $(OPENCV) $(BPO) $(TBB) -g3 -O0 -o $(OUT) $(SRC)
+	@$(CC) $(OPENCV) $(BPO) $(TBB) -g3 -O0 -o $(OUT) $(SRC)
 clean:
 	rm -f $(OUT)
