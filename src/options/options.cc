@@ -11,6 +11,8 @@ struct Options options_parser(int argc, char** argv)
     ("filter,f", bpo::value<std::vector<std::string>>()->multitoken(), "Filter to use")
     ("mode,m", bpo::value<std::string>()->default_value("pa"),
      "Mode choice: pa (TBB: parallel) | se (sequential)")
+    ("write,w", bpo::value<std::string>()->default_value(""),
+     "Write the new video with choosen name")
     ("timer,t", "Enable timer")
     ("benchmark,b", "Benchmark video for the three modes (so, si, pa)")
     ("list-filter,l", "List of available filter (or other FX)");
@@ -63,7 +65,8 @@ struct Options options_parser(int argc, char** argv)
                   filters,
                   mode,
                   timer_p,
-                  benchmark
+                  benchmark,
+                  vm["write"].as<std::string>()
                 };
 
   return opt;

@@ -11,6 +11,7 @@ typedef struct Options
   std::string              mode;
   bool                     timer;
   bool                     benchmark;
+  std::string              dst;
 } options;
 
 struct Options options_parser(int argc, char** argv);

@@ -13,6 +13,7 @@
 #include "filter/binary.hh"
 #include "filter/writer.hh"
 #include "filter/false_writer.hh"
+#include "filter/true_writer.hh"
 #include "filter/modelfilter.hh"
 #include "filter/sepia.hh"
 #include "filter/sharpen.hh"
