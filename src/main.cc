@@ -52,8 +52,8 @@ int main(int argc, char** argv)
   }
 
   // CLEANUP
-  for (auto i : caps)
-    delete i;
+  //for (auto i : caps)
+    //delete i;
 
 }
 
@@ -81,8 +81,8 @@ void exec(std::vector<cv::VideoCapture*> caps, Options& opt)
   }
 
   // CLEANUP
-  for (auto i : filtz)
-    delete i;
+  //for (auto i : filtz)
+    //delete i;
 }
 
 void
